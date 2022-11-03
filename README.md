@@ -21,20 +21,22 @@ Ensure you have the following servers installed and configured within Project-7 
 
 - Install Apache Load Balancer on Project-8-apache-lb server and configure it to point traffic coming to LB to both Web Servers:
 
-`   
- `   #Install apache2`
+```   
+     #Install apache2`
      sudo apt update
      sudo apt install apache2 -y
- `    sudo apt-get install libxml2-dev
+     sudo apt-get install libxml2-dev
+```
+- #Enable following modules:
 
-     #Enable following modules:
+```  
      sudo a2enmod rewrite
      sudo a2enmod proxy
      sudo a2enmod proxy_balancer
      sudo a2enmod proxy_http
      sudo a2enmod headers
      sudo a2enmod lbmethod_bytraffic
-`     
+```     
 
  - #Restart apache2 service
     
@@ -44,28 +46,26 @@ Ensure you have the following servers installed and configured within Project-7 
     
     `sudo systemctl status apache2`
 
+```
+    sudo vi /etc/apache2/sites-available/000-default.conf
 
+    #Add this configuration into this section <VirtualHost *:80>  </VirtualHost>
 
- - sudo vi /etc/apache2/sites-available/000-default.conf
-
- - #Add this configuration into this section <VirtualHost *:80>  </VirtualHost>
-
-`
    <Proxy "balancer://mycluster">
              BalancerMember http://<WebServer1-Private-IP-Address>:80 loadfactor=5 timeout=1
              BalancerMember http://<WebServer2-Private-IP-Address>:80 loadfactor=5 timeout=1
              ProxySet lbmethod=bytraffic
-  `           # ProxySet lbmethod=byrequests
+             # ProxySet lbmethod=byrequests
      </Proxy>
-
+      
       ProxyPreserveHost On
       ProxyPass / balancer://mycluster/
       ProxyPassReverse / balancer://mycluster/
- `     `   
+```
 
 - #Restart apache server
 
-      `sudo systemctl restart apache2`
+ `sudo systemctl restart apache2`
       
       
 - Bytraffic balancing method will distribute incoming load between your Web Servers according to current traffic load. We can control in which proportion the traffic must be distributed by loadfactor parameter.
@@ -88,3 +88,9 @@ Ensure you have the following servers installed and configured within Project-7 
 
 ![162](https://user-images.githubusercontent.com/65022146/199266352-c3fc9017-a4c0-486a-9d5a-2a57a10df882.png)
 ![206](https://user-images.githubusercontent.com/65022146/199266387-15c8e3f1-f346-46c0-b952-d9f284333d0b.png)
+ 
+# END OF PROJECT 8
+ ---------------------------------------------------------------------------------------------------------------------------------------------------------------------
+ 
+
+ 
